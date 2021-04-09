@@ -45,10 +45,10 @@ import time
 
 logger = logging.getLogger(__name__)
 
-CACHEDIR = '/var/cache/eos-image-builder'
-BUILDDIR = '/var/tmp/eos-image-builder'
-SYSCONFDIR = '/etc/eos-image-builder'
-LOCKFILE = '/var/lock/eos-image-builder.lock'
+CACHEDIR = '/var/cache/tos-image-builder'
+BUILDDIR = '/var/tmp/tos-image-builder'
+SYSCONFDIR = '/etc/tos-image-builder'
+LOCKFILE = '/var/lock/tos-image-builder.lock'
 LOCKTIMEOUT = 60
 
 SUPPORTED_ARCHES = [
@@ -328,8 +328,8 @@ def recreate_dir(path):
 
 
 def add_cli_options(argparser):
-    """Add command line options for eos-image-builder. This allows the
-    settings to be shared between eos-image-builder and run-build.
+    """Add command line options for tos-image-builder. This allows the
+    settings to be shared between tos-image-builder and run-build.
     """
     assert(isinstance(argparser, ArgumentParser))
 

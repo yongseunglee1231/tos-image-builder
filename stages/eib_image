@@ -45,13 +45,13 @@ BOOT=${EIB_OSTREE_CHECKOUT}/boot
 
 ostree admin init-fs "${EIB_OSTREE_CHECKOUT}"
 ostree admin --sysroot="${EIB_OSTREE_CHECKOUT}" os-init ${EIB_OSTREE_OS}
-ostree --repo="${REPOPATH}" remote add ${EIB_OSTREE_REMOTE} \
+ostree --repo="${REPOPATH}" remote add ${EIB_OSTREE_REMOTE} --set=gpg-verify-summary=false --no-gpg-verify \
   ${EIB_OSTREE_DEPLOY_URL} ${EIB_OSTREE_REF_DEPLOY}
 ostree --repo="${REPOPATH}" pull-local --disable-fsync \
   --remote=${EIB_OSTREE_REMOTE} ${EIB_OSTREE_REPODIR} ${EIB_OSTREE_REF_DEPLOY}
 
 # Pull the repo metadata ref so USB updates are possible without going online
-ostree --repo="${REPOPATH}" pull ${EIB_OSTREE_REMOTE} ostree-metadata
+# ostree --repo="${REPOPATH}" pull ${EIB_OSTREE_REMOTE} ostree-metadata #TODO:체크
 
 # Basic bootloader setup
 if [[ "${EIB_ARCH}" == "armhf" ]] || [[ "${EIB_ARCH}" == "arm64" ]]; then
@@ -560,8 +560,8 @@ EOF
         #     mmx64.efi
         #
         # For dual-boot installs, we copy the entire contents of EFI/BOOT to
-        # EFI/Endless on the ESP, and creates a boot entry for
-        # EFI/Endless/bootx64.efi. For ISOs and live USBs, we just copy the
+        # EFI/tmaxos on the ESP, and creates a boot entry for
+        # EFI/tmaxos/bootx64.efi. For ISOs and live USBs, we just copy the
         # whole of EFI from boot.zip to the ESP. So for backwards-compatibility
         # in the dual-boot case, and simplicity in the ISO/live case, we
         # arrange for EFI/ to have the right structure:
@@ -569,8 +569,8 @@ EOF
         cp \
           "${DEPLOY}"/usr/lib/efi_binaries/EFI/BOOT/BOOTX64.EFI \
           "${DEPLOY}"/usr/lib/efi_binaries/EFI/BOOT/bootia32.efi \
-          "${DEPLOY}"/usr/lib/efi_binaries/EFI/endless/mmx64.efi \
-          "${DEPLOY}"/usr/lib/efi_binaries/EFI/endless/grubx64.efi \
+          "${DEPLOY}"/usr/lib/efi_binaries/EFI/tmaxos/mmx64.efi \
+          "${DEPLOY}"/usr/lib/efi_binaries/EFI/tmaxos/grubx64.efi \
           "${boot_zip_dir}/EFI/BOOT"
 
         # In case we want to use the additional files in a future release of
@@ -578,9 +578,9 @@ EOF
         # (In the past we created "EFI2" with the full contents of the ESP but
         # triplicating Shim and duplicating the 64-bit GRUB added 50% to the
         # boot.zip size, and this directory was never actually used.)
-        mkdir -p "${boot_zip_dir}/EFI3/BOOT" "${boot_zip_dir}/EFI3/endless"
+        mkdir -p "${boot_zip_dir}/EFI3/BOOT" "${boot_zip_dir}/EFI3/tmaxos"
         cp "${DEPLOY}"/usr/lib/efi_binaries/EFI/BOOT/fbx64.efi "${boot_zip_dir}/EFI3/BOOT"
-        cp "${DEPLOY}"/usr/lib/efi_binaries/EFI/endless/BOOTX64.CSV "${boot_zip_dir}/EFI3/endless"
+        cp "${DEPLOY}"/usr/lib/efi_binaries/EFI/tmaxos/BOOTX64.CSV "${boot_zip_dir}/EFI3/tmaxos"
 
         # Bundle all GRUB versions up for distribution
         local boot_zip="$(eib_outfile boot.zip)"
@@ -614,10 +614,10 @@ EOF
         # we are recreating the layout in boot.zip/EFI, only on the real ESP.
         rm "${ESP}/EFI/BOOT/fbx64.efi"
         mv \
-          "${ESP}/EFI/endless/mmx64.efi" \
-          "${ESP}/EFI/endless/grubx64.efi" \
+          "${ESP}/EFI/tmaxos/mmx64.efi" \
+          "${ESP}/EFI/tmaxos/grubx64.efi" \
           "${ESP}/EFI/BOOT/"
-        rm -r "${ESP}/EFI/endless"
+        rm -r "${ESP}/EFI/tmaxos"
       fi
       ;;
     *)
@@ -767,7 +767,7 @@ eib_mount --bind "${EIB_OSTREE_CHECKOUT}" "${OSTREE_DEPLOYMENT}"/sysroot
 
 # Bind mount the cache and source directories into the deployment so
 # chroot hooks can access them
-export EIB_CACHEDIR_CHROOT=/tmp/eos-image-builder
+export EIB_CACHEDIR_CHROOT=/tmp/tos-image-builder
 export EIB_SRCDIR_CHROOT=${EIB_CACHEDIR_CHROOT}/src
 mkdir -p "${OSTREE_DEPLOYMENT}${EIB_CACHEDIR_CHROOT}" \
       "${OSTREE_DEPLOYMENT}${EIB_SRCDIR_CHROOT}"

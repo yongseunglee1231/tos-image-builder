@@ -284,7 +284,7 @@ split_image() {
 
   # Bind mount the cache and source directories into the deployment so
   # chroot hooks can access them
-  export EIB_CACHEDIR_CHROOT=/tmp/eos-image-builder
+  export EIB_CACHEDIR_CHROOT=/tmp/tos-image-builder
   export EIB_SRCDIR_CHROOT=${EIB_CACHEDIR_CHROOT}/src
   mkdir -p "${OSTREE_DEPLOYMENT}${EIB_CACHEDIR_CHROOT}" \
         "${OSTREE_DEPLOYMENT}${EIB_SRCDIR_CHROOT}"

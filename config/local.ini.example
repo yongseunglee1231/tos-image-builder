@@ -10,7 +10,7 @@
 [image]
 # Skip GPG signing of the completed image files since the default key ID
 # isn't available. Alternatively, the key ID for any private key in the
-# GPG homedir at /etc/eos-image-builder/gnupg.
+# GPG homedir at /etc/tos-image-builder/gnupg.
 signing_keyid =
 
 # Most products don't generate split images, but it can be useful to do

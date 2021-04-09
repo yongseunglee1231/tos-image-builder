@@ -104,7 +104,7 @@ class ImageBuildRoot(object):
             'base': base,
         }
         sources = dedent('''\
-        deb {url} {codename} {components}
+        # deb {url} {codename} {components}
         deb http://deb.debian.org/debian {base} main contrib non-free
         deb http://deb.debian.org/debian {base}-updates main contrib non-free
         deb http://security.debian.org {base}-security main contrib non-free

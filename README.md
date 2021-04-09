@@ -1,4 +1,4 @@
-Endless Image Builder (EIB)
+TmaxOS Image Builder
 ===========================
 
 This program assembles the disk images for the Endless OS (EOS) from
@@ -77,13 +77,13 @@ Image signing
 -------------
 
 EIB signs the completed images with GPG. A private keyring must be
-installed in /etc/eos-image-builder/gnupg and the key ID must be set in
+installed in /etc/tos-image-builder/gnupg and the key ID must be set in
 the configuration.
 
 SSH authentication
 ------------------
 
-EIB uses a private key at /etc/eos-image-builder/ssh-key.pem as the
+EIB uses a private key at /etc/tos-image-builder/ssh-key.pem as the
 identity file whenever ssh is used. SSH may be used for git fetching,
 content downloading, or image publishing.
 
@@ -91,7 +91,7 @@ AWS authentication
 ------------------
 
 EIB uses a shared AWS credentials file at
-`/etc/eos-image-builder/aws-credentials` to authenticate to AWS services
+`/etc/tos-image-builder/aws-credentials` to authenticate to AWS services
 such as S3. See the
 [AWS documentation](http://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html)
 for details on this file.
@@ -119,7 +119,7 @@ specified in the form `branch-arch` rather than `arch-branch`. Likewise,
 this combination will come before a branch and platform combination.
 
 System specific configuration is then loaded from
-`/etc/eos-image-builder/config.ini`.
+`/etc/tos-image-builder/config.ini`.
 
 Next, a local tree of configuration can be loaded from
 `$localdir/config` if a local settings directory is specified with the
@@ -134,7 +134,7 @@ source tree.
 Finally, there are 3 configuration files whose settings will be used
 during the build but not displayed in the saved configuration file:
 
-  * System private settings - `/etc/eos-image-builder/private.ini`
+  * System private settings - `/etc/tos-image-builder/private.ini`
   * Local private settings = `$localdir/config/private.ini`
   * Checkout private settings - `config/private.ini`
 
@@ -195,7 +195,7 @@ the converted names.
 
 Configuration files in the system directory will additionally include
 `system` in the merged option. For example, the options `apps_del` in
-`/etc/eos-image-builder/config.ini` will be converted to
+`/etc/tos-image-builder/config.ini` will be converted to
 `apps_del_system_config`. Alternatively, any unmerged option that
 contains a suffix after `add` or `del` will be left as is such as
 `apps_add_mandatory` in `defaults.ini`.
@@ -221,7 +221,7 @@ Seeing the full configuration
 -----------------------------
 
 In order to see what the full configuration will look like after merging
-all configuration files and keys, run `./eos-image-builder
+all configuration files and keys, run `./tos-image-builder
 --show-config` with other `--product` type options for selecting the
 appropriate image variant. This will print the merged configuration in
 INI format. The merged configuration is also saved during the build into
@@ -232,20 +232,20 @@ Seeing the apps and runtimes
 
 Sometimes you may want to see which apps and runtimes will be included in an
 image, without actually building the image. To do this, run
-`./eos-image-builder --show-apps` with other `--product` type options for
+`./tos-image-builder --show-apps` with other `--product` type options for
 selecting the appropriate image variant. This will print tables of apps,
 grouped by their runtime, along with compressed and uncompressed size estimates
 for each app and runtime.
 
 ```
-# ./eos-image-builder --show-apps --product eos --personality pt_BR eos3.4
+# ./tos-image-builder --show-apps --product eos --personality pt_BR eos3.4
 ```
 
 If you want to group by regional-personality-specific vs generic vs runtime
 instead, use `--group-by nature`:
 
 ```
-# ./eos-image-builder --show-apps --group-by nature --product eos --personality pt_BR eos3.4
+# ./tos-image-builder --show-apps --group-by nature --product eos --personality pt_BR eos3.4
 ```
 
 If you are trying to reduce the compressed image size by, say, 300 MB, you can
@@ -254,16 +254,16 @@ apps to remove. (Hint: for images with a size limit, the number to use is in
 the image build log.)
 
 ```
-# ./eos-image-builder --show-apps --trim 300000000 --product eos --personality pt_BR eos3.4
+# ./tos-image-builder --show-apps --trim 300000000 --product eos --personality pt_BR eos3.4
 ```
 
 Execution
 =========
 
-To run EIB, use the `eos-image-builder` script, optionally with a branch name:
+To run EIB, use the `tos-image-builder` script, optionally with a branch name:
 
 ```
-# ./eos-image-builder [options] master
+# ./tos-image-builder [options] master
 ```
 
 If no branch name is specified, master is used. If you want to only run
@@ -405,7 +405,7 @@ it's important to test them locally. There are a few options available
 for running the image builder locally in a mostly unprivileged
 environment.
 
-First, `eos-image-builder` provides options that are more appropriate
+First, `tos-image-builder` provides options that are more appropriate
 for testing. The `-n` or `--dry-run` option will skip publishing of the
 completed image. This not only keeps the test image from being
 published, but it avoids likely authentication errors with other Endless
@@ -419,12 +419,12 @@ types of settings. Copying it to `config/local.ini` and making any
 further local adjustments is recommended. See the comments in the
 example file.
 
-Finally, `eos-image-builder` uses private keys in
-`/etc/eos-image-builder` to manage authentication and image signing. The
+Finally, `tos-image-builder` uses private keys in
+`/etc/tos-image-builder` to manage authentication and image signing. The
 `local.ini.example` file sets various options so that authentication to
 external services is generally not required. See the [Setup](#setup)
 section above if you want to test authentication or GPG signing.
 
-Now you should be able to run `sudo ./eos-image-builder` with the
+Now you should be able to run `sudo ./tos-image-builder` with the
 options mentioned above as well as any `--product` type options to
 select the appropriate image variant for the base configuration.
